@@ -78,7 +78,7 @@ tween_elements <- function(data, time, group, ease, timerange, nframes, cores = 
         )
     },  mc.cores = cores)
     tweenInfo <- tweendata[[1]][, c('group', 'frame')]
-    tweendata <- as.data.frame(lapply(tweendata, `[[`, i = 'data'))
+    tweendata <- as.data.frame(mclapply(tweendata, `[[`, i = 'data'),mc.cores = cores)
     names(tweendata) <- names(data)
     tweendata$.frame <- tweenInfo$frame
     tweendata$.group <- tweenInfo$group
