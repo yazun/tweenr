@@ -42,7 +42,7 @@
 #'
 #' @export
 #'
-tween_elements <- function(data, time, group, ease, timerange, nframes) {
+tween_elements <- function(data, time, group, ease, timerange, nframes, cores = 1) {
     if (!all(data[[ease]] %in% validEase)) {
         stop("All names given in the easing column must be valid easers")
     }
@@ -62,7 +62,7 @@ tween_elements <- function(data, time, group, ease, timerange, nframes) {
     data <- data[, !names(data) %in% specialCols, drop = FALSE]
 
     colClasses <- col_classes(data)
-    tweendata <- lapply(seq_along(data),  function(i) {
+    tweendata <- mclapply(seq_along(data),  function(i) {
         d <- data[[i]]
         switch(
             colClasses[i],
@@ -76,7 +76,7 @@ tween_elements <- function(data, time, group, ease, timerange, nframes) {
             numlist =,
             list = interpolate_list_element(d, group, frame, ease)
         )
-    })
+    }, cores)
     tweenInfo <- tweendata[[1]][, c('group', 'frame')]
     tweendata <- as.data.frame(lapply(tweendata, `[[`, i = 'data'))
     names(tweendata) <- names(data)
