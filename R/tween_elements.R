@@ -76,7 +76,7 @@ tween_elements <- function(data, time, group, ease, timerange, nframes, cores = 
             numlist =,
             list = interpolate_list_element(d, group, frame, ease)
         )
-    }, cores)
+    },  mc.cores = cores)
     tweenInfo <- tweendata[[1]][, c('group', 'frame')]
     tweendata <- as.data.frame(lapply(tweendata, `[[`, i = 'data'))
     names(tweendata) <- names(data)
